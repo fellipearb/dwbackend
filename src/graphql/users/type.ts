@@ -1,7 +1,7 @@
-import { Field, ObjectType } from "type-graphql";
+import { Field, InputType, ObjectType } from "type-graphql";
 
 @ObjectType()
-class UserType {
+export class UserType {
   @Field()
   id: number;
 
@@ -12,4 +12,17 @@ class UserType {
   login: string;
 }
 
-export default UserType;
+@InputType()
+export class UserInput {
+  @Field({ nullable: true })
+  id?: number;
+
+  @Field()
+  name: string;
+
+  @Field()
+  login: string;
+
+  @Field({ nullable: true })
+  password?: string;
+}
