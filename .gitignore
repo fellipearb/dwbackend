@@ -1,0 +1,25 @@
+# Logs
+*.log
+
+# Build
+dist
+
+# Node
+node_modules
+package-lock.json
+
+# Env
+.env
+
+# OS
+.DS_Store
+
+# Tests
+test/coverage/
+
+.idea/
+
+# Vim
+*.swo
+*.swn
+*.swp
