@@ -10,6 +10,9 @@ export class UserType {
 
   @Field()
   login: string;
+
+  @Field()
+  password: string;
 }
 
 @InputType()
