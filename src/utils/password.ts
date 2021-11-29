@@ -4,6 +4,6 @@ export const encrypt = (password: string) => {
   return hash(password, 5);
 };
 
-export const matchPassword = (password: string, dbpassword: string) => {
+export const comparePassword = (password: string, dbpassword: string) => {
   return compare(password, dbpassword);
 };
