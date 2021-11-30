@@ -1,3 +1,4 @@
+import { sign } from "jsonwebtoken";
 import { Resolver, Query, Arg } from "type-graphql";
 import * as db from "../../database/db";
 import { comparePassword } from "../../utils/password";
@@ -22,6 +23,12 @@ export class LoginResolver {
       throw new Error("Bad password");
     }
 
-    return { ...user.dataValues, password: "", accessToken: "jhfksjhdk" };
+    return {
+      ...user.dataValues,
+      password: "",
+      accessToken: sign({ ...user.dataValues }, process.env.TOKEN_SECRET, {
+        expiresIn: process.env.TOKEN_EXPIRES_IN,
+      }),
+    };
   }
 }
