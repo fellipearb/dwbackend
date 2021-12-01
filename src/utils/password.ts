@@ -1,4 +1,4 @@
-import { hash, compare } from "bcryptjs";
+import { hash, compare } from 'bcryptjs';
 
 export const encrypt = (password: string) => {
   return hash(password, 5);

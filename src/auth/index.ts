@@ -1,5 +1,5 @@
-import { AuthChecker } from "type-graphql";
-import { verify } from "jsonwebtoken";
+import { AuthChecker } from 'type-graphql';
+import { verify } from 'jsonwebtoken';
 
 interface Context {
   token?: string;
@@ -12,7 +12,7 @@ const Auth: AuthChecker<Context> = ({ context }): boolean => {
     return false;
   }
 
-  const [, authorization] = authHeader.split(" ");
+  const [, authorization] = authHeader.split(' ');
 
   try {
     const decoded = verify(authorization, process.env.TOKEN_SECRET);
