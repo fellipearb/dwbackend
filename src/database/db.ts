@@ -1,7 +1,8 @@
-import * as sequelize from "sequelize";
-import * as dotenv from "dotenv";
+import * as sequelize from 'sequelize';
+import * as dotenv from 'dotenv';
 
-import usersModel from "./models/users";
+import usersModel from './models/users';
+import serviceOrdersModel from './models/serviceOrders';
 
 dotenv.config();
 
@@ -16,7 +17,7 @@ const sequelizeConnection = new Sequelize(
   {
     host: process.env.DB_HOST,
     port: 3306,
-    dialect: "mysql",
+    dialect: 'mysql',
     define: {
       freezeTableName: true,
     },
@@ -27,20 +28,20 @@ const sequelizeConnection = new Sequelize(
       idle: 10000,
     },
     operatorsAliases: null,
-  }
+  },
 );
 
-const models = [usersModel];
+const models = [usersModel, serviceOrdersModel];
 
 // Initialize models
-models.forEach((model) => {
+models.forEach(model => {
   const seqModel = model(sequelizeConnection, sequelize);
   db[seqModel.name] = seqModel;
 });
 
 // Apply associations
-Object.keys(db).forEach((key) => {
-  if ("associate" in db[key]) {
+Object.keys(db).forEach(key => {
+  if ('associate' in db[key]) {
     db[key].associate(db);
   }
 });

@@ -1,7 +1,7 @@
-import { Resolver, Query, Mutation, Arg, Authorized } from "type-graphql";
-import { UserType, UserInput } from "./types";
-import * as db from "../../database/db";
-import { encrypt } from "../../utils/password";
+import { Resolver, Query, Mutation, Arg, Authorized } from 'type-graphql';
+import { UserType, UserInput } from './types';
+import * as db from '../../database/db';
+import { encrypt } from '../../utils/password';
 
 @Resolver()
 export class UsersResolver {
@@ -13,31 +13,45 @@ export class UsersResolver {
 
   @Query(() => UserType)
   @Authorized()
-  async getUser(@Arg("userId") userId: number): Promise<UserType> {
-    return await db.default.users.findByPk(userId);
-  }
+  async getUser(@Arg('userId') userId: number): Promise<UserType> {
+    const user = await db.default.users.findByPk(userId);
 
-  @Mutation(() => UserType)
-  @Authorized()
-  async storeUser(@Arg("UserData") UserData: UserInput): Promise<UserType> {
-    return await db.default.users.create({
-      ...UserData,
-      password: await encrypt(UserData.password),
-    });
-  }
-
-  @Mutation(() => UserType)
-  @Authorized()
-  async updateUser(@Arg("UserData") UserData: UserInput): Promise<UserType> {
-    if (UserData.password) {
-      UserData.password = await encrypt(UserData.password);
+    if (!user) {
+      throw new Error('Could not find user');
     }
 
-    await db.default.users.update(
-      { ...UserData },
-      { where: { id: UserData.id } }
-    );
+    return user;
+  }
 
-    return await db.default.users.findByPk(UserData.id);
+  @Mutation(() => UserType)
+  @Authorized()
+  async storeUser(@Arg('UserData') UserData: UserInput): Promise<UserType> {
+    try {
+      return await db.default.users.create({
+        ...UserData,
+        password: await encrypt(UserData.password),
+      });
+    } catch (error) {
+      throw new Error('error when store user');
+    }
+  }
+
+  @Mutation(() => UserType)
+  @Authorized()
+  async updateUser(@Arg('UserData') UserData: UserInput): Promise<UserType> {
+    try {
+      if (UserData.password) {
+        UserData.password = await encrypt(UserData.password);
+      }
+
+      await db.default.users.update(
+        { ...UserData },
+        { where: { id: UserData.id } },
+      );
+
+      return await db.default.users.findByPk(UserData.id);
+    } catch (error) {
+      throw new Error('error when update user');
+    }
   }
 }

@@ -1,9 +1,9 @@
-import "reflect-metadata";
-import * as dotenv from "dotenv";
+import 'reflect-metadata';
+import * as dotenv from 'dotenv';
 
-import schema from "./schema";
+import schema from './schema';
 
-import { ApolloServer } from "apollo-server";
+import { ApolloServer } from 'apollo-server';
 
 const startApp = async () => {
   dotenv.config();

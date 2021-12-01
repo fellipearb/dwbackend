@@ -1,5 +1,5 @@
 const usersModel = (sequelize, { INTEGER, STRING, DATE }) => {
-  return sequelize.define("users", {
+  return sequelize.define('users', {
     id: {
       type: INTEGER(10),
       autoIncrement: true,
