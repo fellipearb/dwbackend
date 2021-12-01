@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Arg } from "type-graphql";
+import { Resolver, Query, Mutation, Arg, Authorized } from "type-graphql";
 import { UserType, UserInput } from "./types";
 import * as db from "../../database/db";
 import { encrypt } from "../../utils/password";
@@ -11,6 +11,7 @@ export class UsersResolver {
   }
 
   @Query(() => UserType)
+  @Authorized()
   async getUser(@Arg("userId") userId: number): Promise<UserType> {
     return await db.default.users.findByPk(userId);
   }
