@@ -6,6 +6,7 @@ import { encrypt } from "../../utils/password";
 @Resolver()
 export class UsersResolver {
   @Query(() => [UserType])
+  @Authorized()
   async getAllUsers(): Promise<[UserType]> {
     return await db.default.users.findAll();
   }
@@ -17,6 +18,7 @@ export class UsersResolver {
   }
 
   @Mutation(() => UserType)
+  @Authorized()
   async storeUser(@Arg("UserData") UserData: UserInput): Promise<UserType> {
     return await db.default.users.create({
       ...UserData,
@@ -25,6 +27,7 @@ export class UsersResolver {
   }
 
   @Mutation(() => UserType)
+  @Authorized()
   async updateUser(@Arg("UserData") UserData: UserInput): Promise<UserType> {
     if (UserData.password) {
       UserData.password = await encrypt(UserData.password);
