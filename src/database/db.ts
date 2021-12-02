@@ -3,6 +3,7 @@ import * as dotenv from 'dotenv';
 
 import usersModel from './models/users';
 import serviceOrdersModel from './models/serviceOrders';
+import clientsModel from './models/clients';
 
 dotenv.config();
 
@@ -31,7 +32,7 @@ const sequelizeConnection = new Sequelize(
   },
 );
 
-const models = [usersModel, serviceOrdersModel];
+const models = [usersModel, serviceOrdersModel, clientsModel];
 
 // Initialize models
 models.forEach(model => {
