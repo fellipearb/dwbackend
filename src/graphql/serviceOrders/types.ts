@@ -31,6 +31,9 @@ export class ServiceOrdersType {
 
   @Field()
   status_id: number;
+
+  @Field()
+  closedAt: number;
 }
 
 @InputType()
@@ -64,4 +67,7 @@ export class ServiceOrdersInput {
 
   @Field()
   status_id: number;
+
+  @Field()
+  closedAt: number;
 }

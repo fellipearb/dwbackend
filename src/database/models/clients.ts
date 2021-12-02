@@ -20,8 +20,14 @@ const clientsModel = (sequelize, { INTEGER, STRING, DATE, TEXT }) => {
     cpf: {
       type: STRING(11),
     },
+    cep: {
+      type: STRING(8),
+    },
     street: {
       type: STRING(200),
+    },
+    number: {
+      type: STRING(8),
     },
     district: {
       type: STRING(200),
@@ -42,9 +48,6 @@ const clientsModel = (sequelize, { INTEGER, STRING, DATE, TEXT }) => {
       type: DATE,
     },
     updatedAt: {
-      type: DATE,
-    },
-    closedAt: {
       type: DATE,
     },
   });
