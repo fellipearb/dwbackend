@@ -7,7 +7,9 @@ export class ServiceOrdersResolver {
   @Query(() => [ServiceOrdersType])
   @Authorized()
   async getAllServiceOrders(): Promise<[ServiceOrdersType]> {
-    return await db.default.service_orders.findAll();
+    return await db.default.service_orders.findAll({
+      include: ['client'],
+    });
   }
 
   @Query(() => ServiceOrdersType)

@@ -35,14 +35,20 @@ const sequelizeConnection = new Sequelize(
 
 const models = [usersModel, clientsModel, statusModel, serviceOrdersModel];
 
-// Initialize models
 models.forEach(model => {
   const seqModel = model(sequelizeConnection, sequelize);
   db[seqModel.name] = seqModel;
 });
 
-// Apply associations
+db.service_orders.associate = models => {
+  db.service_orders.belongsTo(models.clients, {
+    foreignKey: 'client_id',
+    as: 'client',
+  });
+};
+
 Object.keys(db).forEach(key => {
+  console.log('associate' in db[key], db[key]);
   if ('associate' in db[key]) {
     db[key].associate(db);
   }

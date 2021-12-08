@@ -1,3 +1,5 @@
+import clientsModel from './clients';
+
 const serviceOrdersModel = (sequelize, { INTEGER, STRING, DATE, TEXT }) => {
   return sequelize.define('service_orders', {
     id: {

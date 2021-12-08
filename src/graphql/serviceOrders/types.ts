@@ -1,5 +1,5 @@
 import { Field, InputType, ObjectType } from 'type-graphql';
-
+import { ClientType } from '../clients/types';
 @ObjectType()
 export class ServiceOrdersType {
   @Field()
@@ -8,32 +8,35 @@ export class ServiceOrdersType {
   @Field()
   client_id: number;
 
-  @Field()
-  equipment: string;
+  @Field({ nullable: true })
+  equipment?: string;
 
-  @Field()
-  brand: string;
+  @Field({ nullable: true })
+  brand?: string;
 
-  @Field()
-  identification: string;
+  @Field({ nullable: true })
+  identification?: string;
 
-  @Field()
-  reports: string;
+  @Field({ nullable: true })
+  reports?: string;
 
-  @Field()
-  description: string;
+  @Field({ nullable: true })
+  description?: string;
 
-  @Field()
-  notes: string;
+  @Field({ nullable: true })
+  notes?: string;
 
-  @Field()
-  value: string;
+  @Field({ nullable: true })
+  value?: string;
 
   @Field()
   status_id: number;
 
-  @Field()
-  closedAt: number;
+  @Field({ nullable: true })
+  closedAt?: string;
+
+  @Field({ nullable: true })
+  client: ClientType;
 }
 
 @InputType()
@@ -45,29 +48,29 @@ export class ServiceOrdersInput {
   client_id: number;
 
   @Field({ nullable: true })
-  equipment: string;
+  equipment?: string;
 
   @Field({ nullable: true })
-  brand: string;
+  brand?: string;
 
   @Field({ nullable: true })
-  identification: string;
+  identification?: string;
 
   @Field({ nullable: true })
-  reports: string;
+  reports?: string;
 
   @Field({ nullable: true })
-  description: string;
+  description?: string;
 
   @Field({ nullable: true })
-  notes: string;
+  notes?: string;
 
   @Field({ nullable: true })
-  value: string;
+  value?: string;
 
   @Field()
   status_id: number;
 
-  @Field()
-  closedAt: number;
+  @Field({ nullable: true })
+  closedAt?: string;
 }
