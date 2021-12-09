@@ -48,7 +48,6 @@ db.service_orders.associate = models => {
 };
 
 Object.keys(db).forEach(key => {
-  console.log('associate' in db[key], db[key]);
   if ('associate' in db[key]) {
     db[key].associate(db);
   }

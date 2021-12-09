@@ -1,6 +1,11 @@
 import { Field, InputType, ObjectType } from 'type-graphql';
 
 @ObjectType()
+class ClientTypeContent {
+  @Field()
+  tel: string;
+}
+@ObjectType()
 export class ClientType {
   @Field()
   id: number;
@@ -40,6 +45,9 @@ export class ClientType {
 
   @Field()
   notes: string;
+
+  @Field()
+  content?: ClientTypeContent;
 }
 
 @InputType()

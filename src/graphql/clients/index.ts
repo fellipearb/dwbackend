@@ -1,13 +1,16 @@
 import { Resolver, Query, Mutation, Arg, Authorized } from 'type-graphql';
 import { ClientType, ClientInput } from './types';
 import * as db from '../../database/db';
+import { buildClient, buildClients } from './domain';
 
 @Resolver()
 export class ClientsResolver {
   @Query(() => [ClientType])
   @Authorized()
   async getAllClients(): Promise<[ClientType]> {
-    return await db.default.clients.findAll();
+    const clients = await db.default.clients.findAll();
+
+    return buildClients(clients);
   }
 
   @Query(() => ClientType)
@@ -19,7 +22,7 @@ export class ClientsResolver {
       throw new Error('Could not find user');
     }
 
-    return user;
+    return buildClient(user);
   }
 
   @Mutation(() => ClientType)
