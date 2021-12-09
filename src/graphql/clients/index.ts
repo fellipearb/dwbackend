@@ -8,7 +8,9 @@ export class ClientsResolver {
   @Query(() => [ClientType])
   @Authorized()
   async getAllClients(): Promise<[ClientType]> {
-    const clients = await db.default.clients.findAll();
+    const clients = await db.default.clients.findAll({
+      order: [['name', 'ASC']],
+    });
 
     return buildClients(clients);
   }
