@@ -1,5 +1,9 @@
 import { Field, InputType, ObjectType } from 'type-graphql';
 import { ClientType } from '../clients/types';
+import {
+  ServiceOrdersImagesInput,
+  ServiceOrdersImagesType,
+} from '../serviceOrdersImages/types';
 @ObjectType()
 export class ServiceOrdersType {
   @Field()
@@ -37,6 +41,9 @@ export class ServiceOrdersType {
 
   @Field({ nullable: true })
   client: ClientType;
+
+  @Field(type => [ServiceOrdersImagesType])
+  images?: ServiceOrdersImagesType[];
 }
 
 @InputType()
@@ -73,4 +80,7 @@ export class ServiceOrdersInput {
 
   @Field({ nullable: true })
   closedAt?: string;
+
+  @Field(type => [ServiceOrdersImagesInput], { nullable: true })
+  images?: ServiceOrdersImagesInput[];
 }

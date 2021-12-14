@@ -23,3 +23,6 @@ test/coverage/
 *.swo
 *.swn
 *.swp
+
+storage/*
+!storage/index.ts

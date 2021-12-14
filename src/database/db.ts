@@ -5,6 +5,7 @@ import usersModel from './models/users';
 import serviceOrdersModel from './models/serviceOrders';
 import clientsModel from './models/clients';
 import statusModel from './models/status';
+import serviceOrdersImagesModel from './models/serviceOrdersImages';
 
 dotenv.config();
 
@@ -33,7 +34,13 @@ const sequelizeConnection = new Sequelize(
   },
 );
 
-const models = [usersModel, clientsModel, statusModel, serviceOrdersModel];
+const models = [
+  usersModel,
+  clientsModel,
+  statusModel,
+  serviceOrdersModel,
+  serviceOrdersImagesModel,
+];
 
 models.forEach(model => {
   const seqModel = model(sequelizeConnection, sequelize);
@@ -44,6 +51,11 @@ db.service_orders.associate = models => {
   db.service_orders.belongsTo(models.clients, {
     foreignKey: 'client_id',
     as: 'client',
+  });
+
+  db.service_orders.hasMany(models.service_orders_images, {
+    foreignKey: 'service_orders_id',
+    as: 'images',
   });
 };
 

@@ -1,6 +1,8 @@
 import { Resolver, Query, Mutation, Arg, Authorized } from 'type-graphql';
 import { ServiceOrdersType, ServiceOrdersInput } from './types';
 import * as db from '../../database/db';
+import { fileImageToStore, uploadImage } from '../../utils/file';
+import { resolve } from 'path/posix';
 
 @Resolver()
 export class ServiceOrdersResolver {
@@ -8,7 +10,7 @@ export class ServiceOrdersResolver {
   @Authorized()
   async getAllServiceOrders(): Promise<[ServiceOrdersType]> {
     return await db.default.service_orders.findAll({
-      include: ['client'],
+      include: ['client', 'images'],
     });
   }
 
@@ -17,7 +19,9 @@ export class ServiceOrdersResolver {
   async getServiceOrder(
     @Arg('serviceOrderId') userId: number,
   ): Promise<ServiceOrdersType> {
-    const user = await db.default.service_orders.findByPk(userId);
+    const user = await db.default.service_orders.findByPk(userId, {
+      include: ['client', 'images'],
+    });
 
     if (!user) {
       throw new Error('Could not find user');
@@ -32,11 +36,20 @@ export class ServiceOrdersResolver {
     @Arg('ServiceOrderData') ServiceOrderData: ServiceOrdersInput,
   ): Promise<ServiceOrdersType> {
     try {
-      return await db.default.service_orders.create({
+      const serviceOrder = await db.default.service_orders.create({
         ...ServiceOrderData,
       });
+
+      const { images } = ServiceOrderData;
+
+      await uploadImage(db, images, serviceOrder.id);
+
+      return await db.default.service_orders.findByPk(serviceOrder.id, {
+        include: ['client', 'images'],
+      });
     } catch (error) {
-      throw new Error('error when store user');
+      console.log(error);
+      throw new Error('error when store service order');
     }
   }
 
@@ -51,9 +64,16 @@ export class ServiceOrdersResolver {
         { where: { id: ServiceOrderData.id } },
       );
 
-      return await db.default.service_orders.findByPk(ServiceOrderData.id);
+      const { images } = ServiceOrderData;
+
+      await uploadImage(db, images, ServiceOrderData.id);
+
+      return await db.default.service_orders.findByPk(ServiceOrderData.id, {
+        include: ['client', 'images'],
+      });
     } catch (error) {
-      throw new Error('error when update user');
+      console.log('error', error);
+      throw new Error('error when update service order');
     }
   }
 }
