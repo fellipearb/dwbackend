@@ -10,7 +10,7 @@ export class ServiceOrdersResolver {
   @Authorized()
   async getAllServiceOrders(): Promise<[ServiceOrdersType]> {
     return await db.default.service_orders.findAll({
-      include: ['client', 'images'],
+      include: ['client', 'images', 'status'],
     });
   }
 
@@ -20,7 +20,7 @@ export class ServiceOrdersResolver {
     @Arg('serviceOrderId') userId: number,
   ): Promise<ServiceOrdersType> {
     const user = await db.default.service_orders.findByPk(userId, {
-      include: ['client', 'images'],
+      include: ['client', 'images', 'status'],
     });
 
     if (!user) {
@@ -45,7 +45,7 @@ export class ServiceOrdersResolver {
       await uploadImage(db, images, serviceOrder.id);
 
       return await db.default.service_orders.findByPk(serviceOrder.id, {
-        include: ['client', 'images'],
+        include: ['client', 'images', 'status'],
       });
     } catch (error) {
       console.log(error);
@@ -69,7 +69,7 @@ export class ServiceOrdersResolver {
       await uploadImage(db, images, ServiceOrderData.id);
 
       return await db.default.service_orders.findByPk(ServiceOrderData.id, {
-        include: ['client', 'images'],
+        include: ['client', 'images', 'status'],
       });
     } catch (error) {
       console.log('error', error);

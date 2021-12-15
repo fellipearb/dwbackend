@@ -57,6 +57,11 @@ db.service_orders.associate = models => {
     foreignKey: 'service_orders_id',
     as: 'images',
   });
+
+  db.service_orders.belongsTo(models.status, {
+    foreignKey: 'status_id',
+    as: 'status',
+  });
 };
 
 Object.keys(db).forEach(key => {

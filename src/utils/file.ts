@@ -3,7 +3,7 @@ export const fileImageToStore = image => {
   const base64Data = image.file.replace(/^data:image\/png;base64,/, '');
   const name = `${new Date().getTime()}.jpg`;
   const path = `${rootPath}/${process.env.STORAGE_PATH}/${process.env.STORAGE_PATH_SERVICE_ORDERS}/${name}`;
-  const pathToSave = `${process.env.STORAGE_URL}/${process.env.STORAGE_PATH}/${process.env.STORAGE_PATH_SERVICE_ORDERS}/${name}`;
+  const pathToSave = `${process.env.STORAGE_URL}/${process.env.STORAGE_PATH_SERVICE_ORDERS}/${name}`;
 
   return {
     base64Data,

@@ -4,6 +4,7 @@ import {
   ServiceOrdersImagesInput,
   ServiceOrdersImagesType,
 } from '../serviceOrdersImages/types';
+import { StatusType } from '../status/types';
 @ObjectType()
 export class ServiceOrdersType {
   @Field()
@@ -44,6 +45,9 @@ export class ServiceOrdersType {
 
   @Field(type => [ServiceOrdersImagesType])
   images?: ServiceOrdersImagesType[];
+
+  @Field({ nullable: true })
+  status?: StatusType;
 }
 
 @InputType()
