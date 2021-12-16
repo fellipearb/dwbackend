@@ -1,8 +1,7 @@
 import { Resolver, Query, Mutation, Arg, Authorized } from 'type-graphql';
 import { ServiceOrdersType, ServiceOrdersInput } from './types';
 import * as db from '../../database/db';
-import { fileImageToStore, uploadImage } from '../../utils/file';
-import { resolve } from 'path/posix';
+import { uploadImage } from '../../utils/file';
 
 @Resolver()
 export class ServiceOrdersResolver {
@@ -11,23 +10,27 @@ export class ServiceOrdersResolver {
   async getAllServiceOrders(): Promise<[ServiceOrdersType]> {
     return await db.default.service_orders.findAll({
       include: ['client', 'images', 'status'],
+      order: [
+        ['updatedAt', 'DESC'],
+        ['id', 'DESC'],
+      ],
     });
   }
 
   @Query(() => ServiceOrdersType)
   @Authorized()
   async getServiceOrder(
-    @Arg('serviceOrderId') userId: number,
+    @Arg('serviceOrderId') serviceOrderId: number,
   ): Promise<ServiceOrdersType> {
-    const user = await db.default.service_orders.findByPk(userId, {
+    const order = await db.default.service_orders.findByPk(serviceOrderId, {
       include: ['client', 'images', 'status'],
     });
 
-    if (!user) {
-      throw new Error('Could not find user');
+    if (!order) {
+      throw new Error('Could not find order');
     }
 
-    return user;
+    return order;
   }
 
   @Mutation(() => ServiceOrdersType)
@@ -42,7 +45,7 @@ export class ServiceOrdersResolver {
 
       const { images } = ServiceOrderData;
 
-      await uploadImage(db, images, serviceOrder.id);
+      images && (await uploadImage(db, images, serviceOrder.id));
 
       return await db.default.service_orders.findByPk(serviceOrder.id, {
         include: ['client', 'images', 'status'],
@@ -66,7 +69,7 @@ export class ServiceOrdersResolver {
 
       const { images } = ServiceOrderData;
 
-      await uploadImage(db, images, ServiceOrderData.id);
+      images && (await uploadImage(db, images, ServiceOrderData.id));
 
       return await db.default.service_orders.findByPk(ServiceOrderData.id, {
         include: ['client', 'images', 'status'],
