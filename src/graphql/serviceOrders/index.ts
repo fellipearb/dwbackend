@@ -2,19 +2,22 @@ import { Resolver, Query, Mutation, Arg, Authorized } from 'type-graphql';
 import { ServiceOrdersType, ServiceOrdersInput } from './types';
 import * as db from '../../database/db';
 import { uploadImage } from '../../utils/file';
+import { buildOrderService, buildOrderServices } from './domain';
 
 @Resolver()
 export class ServiceOrdersResolver {
   @Query(() => [ServiceOrdersType])
   @Authorized()
   async getAllServiceOrders(): Promise<[ServiceOrdersType]> {
-    return await db.default.service_orders.findAll({
+    const orders = await db.default.service_orders.findAll({
       include: ['client', 'images', 'status'],
       order: [
         ['updatedAt', 'DESC'],
         ['id', 'DESC'],
       ],
     });
+
+    return buildOrderServices(orders);
   }
 
   @Query(() => ServiceOrdersType)
@@ -30,7 +33,7 @@ export class ServiceOrdersResolver {
       throw new Error('Could not find order');
     }
 
-    return order;
+    return buildOrderService(order);
   }
 
   @Mutation(() => ServiceOrdersType)
@@ -47,9 +50,11 @@ export class ServiceOrdersResolver {
 
       images && (await uploadImage(db, images, serviceOrder.id));
 
-      return await db.default.service_orders.findByPk(serviceOrder.id, {
+      const order = await db.default.service_orders.findByPk(serviceOrder.id, {
         include: ['client', 'images', 'status'],
       });
+
+      return buildOrderService(order);
     } catch (error) {
       console.log(error);
       throw new Error('error when store service order');
@@ -71,9 +76,14 @@ export class ServiceOrdersResolver {
 
       images && (await uploadImage(db, images, ServiceOrderData.id));
 
-      return await db.default.service_orders.findByPk(ServiceOrderData.id, {
-        include: ['client', 'images', 'status'],
-      });
+      const order = await db.default.service_orders.findByPk(
+        ServiceOrderData.id,
+        {
+          include: ['client', 'images', 'status'],
+        },
+      );
+
+      return buildOrderService(order);
     } catch (error) {
       console.log('error', error);
       throw new Error('error when update service order');

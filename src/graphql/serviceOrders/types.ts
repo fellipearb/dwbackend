@@ -6,6 +6,11 @@ import {
 } from '../serviceOrdersImages/types';
 import { StatusType } from '../status/types';
 @ObjectType()
+export class ServiceOrdersContentType {
+  @Field({ nullable: true })
+  value?: string;
+}
+@ObjectType()
 export class ServiceOrdersType {
   @Field()
   id: number;
@@ -48,6 +53,9 @@ export class ServiceOrdersType {
 
   @Field({ nullable: true })
   status?: StatusType;
+
+  @Field()
+  content: ServiceOrdersContentType;
 }
 
 @InputType()
