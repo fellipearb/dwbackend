@@ -1,6 +1,7 @@
 FROM node:14
 ADD ./package.json .
+ADD ./tsconfig.json .
 COPY ./src .
 RUN npm i
 EXPOSE 4000
-ENTRYPOINT nodemon ./server.ts
+ENTRYPOINT yarn start

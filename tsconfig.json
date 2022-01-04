@@ -8,10 +8,11 @@
     "strict": false,
     "outDir": "./dist",
     "sourceMap": true,
-    "rootDir": "src",
+    "rootDir": "./src",
     "baseUrl": ".",
     "paths": {
       "*": ["node_modules/*"]
     }
-  }
+  },
+  "exclude": ["storage"]
 }
