@@ -1,0 +1,52 @@
+version: '3'
+
+services:
+  db:
+    image: mysql:5.7
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: dwinfotec
+      MYSQL_USER: dwinfotec
+      MYSQL_PASSWORD: dw123456
+    ports:
+      - '3306:3306'
+  phpmyadmin:
+    depends_on:
+      - db
+    links:
+      - db
+    image: phpmyadmin
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_USER=dwinfotec
+      - PMA_PASSWORD=dw123456
+      - PMA_HOST=db
+      - PMA_PORT=3306
+      - UPLOAD_LIMIT=400M
+  node:
+    environment:
+      - NODE_ENV=production
+      - PORT=9000
+    ports:
+      - 9000:9000
+    build:
+      context: .
+      dockerfile: Storage.Dockerfile
+  node2:
+    environment:
+      - NODE_ENV=production
+      - PORT=4000
+    ports:
+      - 4000:4000
+    build:
+      context: .
+      dockerfile: AppNode.Dockerfile
+volumes:
+  db_data: {}
+  wordpress_data: {}
