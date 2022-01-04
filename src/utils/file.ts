@@ -1,9 +1,12 @@
 export const fileImageToStore = image => {
   const rootPath = process.cwd();
-  const base64Data = image.file.replace(/^data:image\/png;base64,/, '');
+  const base64Data = image.file.split(';base64,').pop();
   const name = `${new Date().getTime()}.jpg`;
   const path = `${rootPath}/${process.env.STORAGE_PATH}/${process.env.STORAGE_PATH_SERVICE_ORDERS}/${name}`;
   const pathToSave = `${process.env.STORAGE_URL}/${process.env.STORAGE_PATH_SERVICE_ORDERS}/${name}`;
+
+  console.log(image.file.search(/;base64,/) > -1);
+  console.log(image.file.search(/^data:image\/jpg;base64,/) > -1);
 
   return {
     base64Data,
@@ -19,7 +22,9 @@ export const uploadImage = async (db, images, orderId) =>
       const { base64Data, path, pathToSave } = fileImageToStore(image);
 
       try {
-        await require('fs').writeFileSync(path, base64Data, 'base64');
+        await require('fs').writeFileSync(path, base64Data, {
+          encoding: 'base64',
+        });
 
         await db.default.service_orders_images.create({
           service_orders_id: orderId,

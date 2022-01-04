@@ -4,6 +4,12 @@ import { Field, InputType, ObjectType } from 'type-graphql';
 class ClientTypeContent {
   @Field()
   tel: string;
+
+  @Field()
+  cpf: string;
+
+  @Field()
+  cep: string;
 }
 @ObjectType()
 export class ClientType {

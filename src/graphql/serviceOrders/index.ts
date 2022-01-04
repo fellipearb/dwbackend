@@ -48,7 +48,7 @@ export class ServiceOrdersResolver {
 
       const { images } = ServiceOrderData;
 
-      images && (await uploadImage(db, images, serviceOrder.id));
+      !!images.length && (await uploadImage(db, images, serviceOrder.id));
 
       const order = await db.default.service_orders.findByPk(serviceOrder.id, {
         include: ['client', 'images', 'status'],
@@ -74,7 +74,7 @@ export class ServiceOrdersResolver {
 
       const { images } = ServiceOrderData;
 
-      images && (await uploadImage(db, images, ServiceOrderData.id));
+      !!images.length && (await uploadImage(db, images, ServiceOrderData.id));
 
       const order = await db.default.service_orders.findByPk(
         ServiceOrderData.id,
