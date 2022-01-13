@@ -41,8 +41,9 @@ services:
   node2:
     environment:
       # - NODE_ENV=production
-      #DB
       - PORT=4000
+
+      #DB
       - DB_HOST=db
       - DB_USER=dwinfotec
       - DB_PASS=dw123456
