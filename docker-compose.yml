@@ -7,10 +7,10 @@ services:
       - db_data:/var/lib/mysql
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: root123
-      MYSQL_DATABASE: dwinfotec
       MYSQL_USER: dwinfotec
       MYSQL_PASSWORD: dw123456
+      MYSQL_DATABASE: dwinfotec
+      MYSQL_ROOT_PASSWORD: root123
     ports:
       - '3306:3306'
   phpmyadmin:
@@ -40,8 +40,23 @@ services:
       dockerfile: Storage.Dockerfile
   node2:
     environment:
-      - NODE_ENV=production
+      # - NODE_ENV=production
+      #DB
       - PORT=4000
+      - DB_HOST=db
+      - DB_USER=dwinfotec
+      - DB_PASS=dw123456
+      - DB_NAME=dwinfotec
+
+      #JWT
+      - TOKEN_SECRET=DcPa?vX2j7XGCLxg
+      - TOKEN_EXPIRES_IN=10d
+
+      #PATH FILE IMAGE
+      - STORAGE_URL=http://192.168.1.39:9000
+      - STORAGE_PATH=storage
+      - STORAGE_PATH_SERVICE_ORDERS=service_orders
+
     ports:
       - 4000:4000
     build:

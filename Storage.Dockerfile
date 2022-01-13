@@ -1,4 +1,4 @@
-FROM node:14
+FROM node:16
 ADD ./package.json .
 COPY ./storage .
 RUN npm i

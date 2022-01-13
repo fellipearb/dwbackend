@@ -9,6 +9,9 @@ const startApp = async () => {
   dotenv.config();
 
   const server = new ApolloServer({
+    cors: {
+      origin: '*',
+    },
     schema: await schema,
     context: ({ req }) => {
       const context = {
