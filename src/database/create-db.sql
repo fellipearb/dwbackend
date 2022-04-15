@@ -8,6 +8,7 @@ CREATE TABLE users (
 );
 
 INSERT INTO users (name, login, password) VALUES ('Fellipe Barros', 'fellipearb', '$2a$05$kmwGgev4zOq8ECoZvamFIOcN3LYwTkrtmvgMcIh9RYUN4a/Cs37fG');
+INSERT INTO users (name, login, password) VALUES ('João Barros', 'dwinfotec', '$2a$05$kmwGgev4zOq8ECoZvamFIOcN3LYwTkrtmvgMcIh9RYUN4a/Cs37fG');
 
 
 CREATE TABLE clients (

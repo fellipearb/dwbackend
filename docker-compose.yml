@@ -2,10 +2,10 @@ version: '3.1'
 
 services:
   db:
+    restart: always
     image: mysql:5.7
     volumes:
       - db_data:/var/lib/mysql
-    restart: always
     environment:
       MYSQL_USER: dwinfotec
       MYSQL_PASSWORD: dw123456
@@ -14,12 +14,12 @@ services:
     ports:
       - '3306:3306'
   phpmyadmin:
+    restart: always
     depends_on:
       - db
     links:
       - db
     image: phpmyadmin
-    restart: always
     ports:
       - 8080:80
     environment:
@@ -30,6 +30,7 @@ services:
       - PMA_PORT=3306
       - UPLOAD_LIMIT=400M
   node:
+    restart: always
     environment:
       - NODE_ENV=production
       - PORT=9000
@@ -39,6 +40,7 @@ services:
       context: .
       dockerfile: Storage.Dockerfile
   node2:
+    restart: always
     environment:
       # - NODE_ENV=production
       - PORT=4000
