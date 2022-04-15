@@ -36,8 +36,8 @@ services:
       - PORT=9000
     ports:
       - 9000:9000
-    # volumes:
-    # - ./storage:/storage
+    volumes:
+      - ./storage:/storage
     build:
       context: .
       dockerfile: Storage.Dockerfile
@@ -64,8 +64,8 @@ services:
 
     ports:
       - 4000:4000
-    # volumes:
-    # - ./storage:/storage
+    volumes:
+      - ./storage:/storage
     build:
       context: .
       dockerfile: AppNode.Dockerfile
