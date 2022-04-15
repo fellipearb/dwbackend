@@ -58,7 +58,7 @@ services:
       - TOKEN_EXPIRES_IN=10d
 
       #PATH FILE IMAGE
-      - STORAGE_URL=http://3.16.206.80:9000
+      - STORAGE_URL=http://3.16.206.80:9000/storage
       - STORAGE_PATH=storage
       - STORAGE_PATH_SERVICE_ORDERS=service_orders
 
