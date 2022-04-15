@@ -36,8 +36,8 @@ services:
       - PORT=9000
     ports:
       - 9000:9000
-    volumes:
-      - ./storage:/storage
+    # volumes:
+    # - ./storage:/storage
     build:
       context: .
       dockerfile: Storage.Dockerfile
@@ -58,14 +58,14 @@ services:
       - TOKEN_EXPIRES_IN=10d
 
       #PATH FILE IMAGE
-      - STORAGE_URL=http://192.168.1.39:9000
+      - STORAGE_URL=http://3.16.206.80:9000
       - STORAGE_PATH=storage
       - STORAGE_PATH_SERVICE_ORDERS=service_orders
 
     ports:
       - 4000:4000
-    volumes:
-      - ./storage:/storage
+    # volumes:
+    # - ./storage:/storage
     build:
       context: .
       dockerfile: AppNode.Dockerfile

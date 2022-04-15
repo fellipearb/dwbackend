@@ -1,0 +1,1 @@
+ssh -i ./dw-key/dw-ssh.cer ubuntu@3.16.206.80
