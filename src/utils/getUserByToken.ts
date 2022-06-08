@@ -6,7 +6,7 @@ export type TTOken = {
   company: { id: number; name: string };
 };
 
-const getToken = async (token): Promise<TTOken | null> => {
+const getUserByToken = async (token): Promise<TTOken | null> => {
   const [, authorization] = token.split(' ');
 
   const user = <TTOken>verify(authorization, process.env.TOKEN_SECRET);
@@ -18,4 +18,4 @@ const getToken = async (token): Promise<TTOken | null> => {
   return user;
 };
 
-export default getToken;
+export default getUserByToken;

@@ -3,25 +3,39 @@ import { UserType, UserInput } from './types';
 import * as db from '../../database/db';
 import { encrypt } from '../../utils/password';
 import { AppContext } from '../types/AppContext';
-import getToken from '../../utils/getToken';
+import getUserByToken from '../../utils/getUserByToken';
 
 @Resolver()
 export class UsersResolver {
   @Query(() => [UserType])
   @Authorized()
   async getAllUsers(@Ctx() { token }: AppContext): Promise<[UserType]> {
-    const { company } = await getToken(token);
+    const userByToken = await getUserByToken(token);
+
+    if (!userByToken) {
+      throw new Error('Could not find user');
+    }
 
     return await db.default.users.findAll({
-      where: { id: company.id },
+      where: { company_id: userByToken.company.id },
       include: ['company'],
     });
   }
 
   @Query(() => UserType)
   @Authorized()
-  async getUser(@Arg('userId') userId: number): Promise<UserType> {
+  async getUser(
+    @Ctx() { token }: AppContext,
+    @Arg('userId') userId: number,
+  ): Promise<UserType> {
+    const userByToken = await getUserByToken(token);
+
+    if (!userByToken) {
+      throw new Error('Could not find user');
+    }
+
     const user = await db.default.users.findByPk(userId, {
+      where: { company_id: userByToken.company.id },
       include: ['company'],
     });
 
@@ -34,10 +48,20 @@ export class UsersResolver {
 
   @Mutation(() => UserType)
   @Authorized()
-  async storeUser(@Arg('UserData') UserData: UserInput): Promise<UserType> {
+  async storeUser(
+    @Ctx() { token }: AppContext,
+    @Arg('UserData') UserData: UserInput,
+  ): Promise<UserType> {
+    const userByToken = await getUserByToken(token);
+
+    if (!userByToken) {
+      throw new Error('Could not find user');
+    }
+
     try {
       return await db.default.users.create({
         ...UserData,
+        company_id: userByToken.company.id,
         password: await encrypt(UserData.password),
       });
     } catch (error) {
@@ -47,14 +71,23 @@ export class UsersResolver {
 
   @Mutation(() => UserType)
   @Authorized()
-  async updateUser(@Arg('UserData') UserData: UserInput): Promise<UserType> {
+  async updateUser(
+    @Ctx() { token }: AppContext,
+    @Arg('UserData') UserData: UserInput,
+  ): Promise<UserType> {
+    const userByToken = await getUserByToken(token);
+
+    if (!userByToken) {
+      throw new Error('Could not find user');
+    }
+
     try {
       if (UserData.password) {
         UserData.password = await encrypt(UserData.password);
       }
 
       await db.default.users.update(
-        { ...UserData },
+        { ...UserData, company_id: userByToken.company.id },
         { where: { id: UserData.id } },
       );
 

@@ -1,14 +1,23 @@
-import { Resolver, Query, Mutation, Arg, Authorized } from 'type-graphql';
+import { Resolver, Query, Mutation, Arg, Authorized, Ctx } from 'type-graphql';
 import { ClientType, ClientInput } from './types';
 import * as db from '../../database/db';
 import { buildClient, buildClients } from './domain';
+import { AppContext } from '../types/AppContext';
+import getUserByToken from '../../utils/getUserByToken';
 
 @Resolver()
 export class ClientsResolver {
   @Query(() => [ClientType])
   @Authorized()
-  async getAllClients(): Promise<[ClientType]> {
+  async getAllClients(@Ctx() { token }: AppContext): Promise<[ClientType]> {
+    const userByToken = await getUserByToken(token);
+
+    if (!userByToken) {
+      throw new Error('Could not find user');
+    }
+
     const clients = await db.default.clients.findAll({
+      where: { company_id: userByToken.company.id },
       include: ['company'],
       order: [['name', 'ASC']],
     });
@@ -34,10 +43,18 @@ export class ClientsResolver {
   @Authorized()
   async storeClient(
     @Arg('ClientData') ClientData: ClientInput,
+    @Ctx() { token }: AppContext,
   ): Promise<ClientType> {
+    const userByToken = await getUserByToken(token);
+
+    if (!userByToken) {
+      throw new Error('Could not find user');
+    }
+
     try {
       return await db.default.clients.create({
         ...ClientData,
+        company_id: userByToken.company.id,
       });
     } catch (error) {
       console.error(error);
@@ -49,10 +66,17 @@ export class ClientsResolver {
   @Authorized()
   async updateClient(
     @Arg('ClientData') ClientData: ClientInput,
+    @Ctx() { token }: AppContext,
   ): Promise<ClientType> {
+    const userByToken = await getUserByToken(token);
+
+    if (!userByToken) {
+      throw new Error('Could not find user');
+    }
+
     try {
       await db.default.clients.update(
-        { ...ClientData },
+        { ...ClientData, company_id: userByToken.company.id },
         { where: { id: ClientData.id } },
       );
 
