@@ -1,14 +1,21 @@
-import { Resolver, Query, Mutation, Arg, Authorized } from 'type-graphql';
+import { Resolver, Query, Mutation, Arg, Authorized, Ctx } from 'type-graphql';
 import { UserType, UserInput } from './types';
 import * as db from '../../database/db';
 import { encrypt } from '../../utils/password';
+import { AppContext } from '../types/AppContext';
+import getToken from '../../utils/getToken';
 
 @Resolver()
 export class UsersResolver {
   @Query(() => [UserType])
   @Authorized()
-  async getAllUsers(): Promise<[UserType]> {
-    return await db.default.users.findAll({ include: ['company'] });
+  async getAllUsers(@Ctx() { token }: AppContext): Promise<[UserType]> {
+    const { company } = await getToken(token);
+
+    return await db.default.users.findAll({
+      where: { id: company.id },
+      include: ['company'],
+    });
   }
 
   @Query(() => UserType)
