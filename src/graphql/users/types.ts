@@ -1,9 +1,13 @@
 import { Field, InputType, ObjectType } from 'type-graphql';
+import { CompaniesType } from '../companies/types';
 
 @ObjectType()
 export class UserType {
   @Field()
   id: number;
+
+  @Field()
+  company_id: number;
 
   @Field()
   name: string;
@@ -16,6 +20,9 @@ export class UserType {
 
   @Field()
   accessToken: string;
+
+  @Field()
+  company: CompaniesType;
 }
 
 @InputType()

@@ -6,6 +6,10 @@ const usersModel = (sequelize, { INTEGER, STRING, DATE }) => {
       allowNull: false,
       primaryKey: true,
     },
+    company_id: {
+      type: STRING(200),
+      allowNull: false,
+    },
     name: {
       type: STRING(200),
       allowNull: false,

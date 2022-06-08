@@ -11,7 +11,10 @@ export class LoginResolver {
   async doLogin(@Arg('LoginData') LoginData: LoginInput): Promise<UserType> {
     const { login, password } = LoginData;
 
-    const user = await db.default.users.findOne({ where: { login } });
+    const user = await db.default.users.findOne({
+      include: ['company'],
+      where: { login },
+    });
 
     if (!user) {
       throw new Error('Could not find user');

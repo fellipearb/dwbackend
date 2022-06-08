@@ -1,5 +1,17 @@
+CREATE TABLE companies (
+	id int(10) AUTO_INCREMENT PRIMARY KEY,
+	name varchar(200),
+	createdAt DATETIME,
+	updatedAt DATETIME
+);
+
+INSERT INTO companies (name) VALUES ('Dwinfotec');
+INSERT INTO companies (name) VALUES ('Barros Tech');
+
+
 CREATE TABLE users (
 	id int(10) AUTO_INCREMENT PRIMARY KEY,
+	company_id int(10) NOT NULL,
 	name varchar(200),
 	login varchar(200) unique,
 	password varchar(200),
@@ -7,14 +19,15 @@ CREATE TABLE users (
 	updatedAt DATETIME
 );
 
-INSERT INTO users (name, login, password) VALUES ('Fellipe Barros', 'fellipearb', '$2a$05$kmwGgev4zOq8ECoZvamFIOcN3LYwTkrtmvgMcIh9RYUN4a/Cs37fG');
-INSERT INTO users (name, login, password) VALUES ('João Barros', 'dwinfotec', '$2a$05$kmwGgev4zOq8ECoZvamFIOcN3LYwTkrtmvgMcIh9RYUN4a/Cs37fG');
+INSERT INTO users (company_id, name, login, password) VALUES (1, 'Fellipe Barros', 'fellipearb', '$2a$05$kmwGgev4zOq8ECoZvamFIOcN3LYwTkrtmvgMcIh9RYUN4a/Cs37fG');
+INSERT INTO users (company_id, name, login, password) VALUES (2, 'João Barros', 'dwinfotec', '$2a$05$kmwGgev4zOq8ECoZvamFIOcN3LYwTkrtmvgMcIh9RYUN4a/Cs37fG');
 
 
 CREATE TABLE clients (
 	id int(10) AUTO_INCREMENT PRIMARY KEY,
+	company_id int(10) NOT NULL,
 	name varchar(200),
-	email varchar(200) unique,
+	email varchar(200),
 	tel varchar(11),
 	cpf varchar(11),
 	cep varchar(8),
@@ -28,6 +41,13 @@ CREATE TABLE clients (
 	createdAt DATETIME,
 	updatedAt DATETIME
 );
+
+INSERT INTO clients (id, company_id, name, email, tel, cpf, cep, street, number, district, city, state, complement) 
+VALUES (1, 1, 'Anacleia Barros', 'dw@tech', '11996010178', '23280902819', '08567140', 'Omega', '235', 'Jardim São José', 'Poá', 'SP', '');
+
+INSERT INTO clients (id, company_id, name, email, tel, cpf, cep, street, number, district, city, state, complement) 
+VALUES (2, 2, 'Geisse Barros', 'barros@tech', '11996010178', '23280902819', '08567140', 'Omega', '235', 'Jardim São José', 'Poá', 'SP', '');
+
 
 CREATE TABLE status (
 	id int(10) AUTO_INCREMENT PRIMARY KEY,

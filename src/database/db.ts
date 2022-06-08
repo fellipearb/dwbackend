@@ -1,6 +1,7 @@
 import * as sequelize from 'sequelize';
 import * as dotenv from 'dotenv';
 
+import companiesModel from './models/companies';
 import usersModel from './models/users';
 import serviceOrdersModel from './models/serviceOrders';
 import clientsModel from './models/clients';
@@ -35,6 +36,7 @@ const sequelizeConnection = new Sequelize(
 );
 
 const models = [
+  companiesModel,
   usersModel,
   clientsModel,
   statusModel,
@@ -46,6 +48,13 @@ models.forEach(model => {
   const seqModel = model(sequelizeConnection, sequelize);
   db[seqModel.name] = seqModel;
 });
+
+db.users.associate = models => {
+  db.users.belongsTo(models.companies, {
+    foreignKey: 'company_id',
+    as: 'company',
+  });
+};
 
 db.service_orders.associate = models => {
   db.service_orders.belongsTo(models.clients, {
