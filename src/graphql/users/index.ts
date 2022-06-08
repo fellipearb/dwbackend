@@ -8,13 +8,15 @@ export class UsersResolver {
   @Query(() => [UserType])
   @Authorized()
   async getAllUsers(): Promise<[UserType]> {
-    return await db.default.users.findAll();
+    return await db.default.users.findAll({ include: ['company'] });
   }
 
   @Query(() => UserType)
   @Authorized()
   async getUser(@Arg('userId') userId: number): Promise<UserType> {
-    const user = await db.default.users.findByPk(userId);
+    const user = await db.default.users.findByPk(userId, {
+      include: ['company'],
+    });
 
     if (!user) {
       throw new Error('Could not find user');
@@ -49,7 +51,9 @@ export class UsersResolver {
         { where: { id: UserData.id } },
       );
 
-      return await db.default.users.findByPk(UserData.id);
+      return await db.default.users.findByPk(UserData.id, {
+        include: ['company'],
+      });
     } catch (error) {
       throw new Error('error when update user');
     }

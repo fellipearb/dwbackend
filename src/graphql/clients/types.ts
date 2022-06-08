@@ -1,4 +1,5 @@
 import { Field, InputType, ObjectType } from 'type-graphql';
+import { CompaniesType } from '../companies/types';
 
 @ObjectType()
 class ClientTypeContent {
@@ -15,6 +16,9 @@ class ClientTypeContent {
 export class ClientType {
   @Field()
   id: number;
+
+  @Field()
+  company_id: number;
 
   @Field()
   name: string;
@@ -54,12 +58,18 @@ export class ClientType {
 
   @Field()
   content?: ClientTypeContent;
+
+  @Field()
+  company: CompaniesType;
 }
 
 @InputType()
 export class ClientInput {
   @Field({ nullable: true })
   id?: number;
+
+  @Field()
+  company_id: number;
 
   @Field()
   name: string;

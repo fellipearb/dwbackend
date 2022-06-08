@@ -9,6 +9,7 @@ export class ClientsResolver {
   @Authorized()
   async getAllClients(): Promise<[ClientType]> {
     const clients = await db.default.clients.findAll({
+      include: ['company'],
       order: [['name', 'ASC']],
     });
 
@@ -18,7 +19,9 @@ export class ClientsResolver {
   @Query(() => ClientType)
   @Authorized()
   async getClient(@Arg('cliendId') cliendId: number): Promise<ClientType> {
-    const user = await db.default.clients.findByPk(cliendId);
+    const user = await db.default.clients.findByPk(cliendId, {
+      include: ['company'],
+    });
 
     if (!user) {
       throw new Error('Could not find user');
@@ -37,6 +40,7 @@ export class ClientsResolver {
         ...ClientData,
       });
     } catch (error) {
+      console.error(error);
       throw new Error('error when store user');
     }
   }
@@ -52,7 +56,9 @@ export class ClientsResolver {
         { where: { id: ClientData.id } },
       );
 
-      return await db.default.clients.findByPk(ClientData.id);
+      return await db.default.clients.findByPk(ClientData.id, {
+        include: ['company'],
+      });
     } catch (error) {
       throw new Error('error when update user');
     }

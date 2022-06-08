@@ -56,6 +56,13 @@ db.users.associate = models => {
   });
 };
 
+db.clients.associate = models => {
+  db.clients.belongsTo(models.companies, {
+    foreignKey: 'company_id',
+    as: 'company',
+  });
+};
+
 db.service_orders.associate = models => {
   db.service_orders.belongsTo(models.clients, {
     foreignKey: 'client_id',
