@@ -1,16 +1,37 @@
-import { Resolver, Query, Mutation, Arg, Authorized } from 'type-graphql';
+import { Resolver, Query, Mutation, Arg, Authorized, Ctx } from 'type-graphql';
 import { ServiceOrdersType, ServiceOrdersInput } from './types';
 import * as db from '../../database/db';
 import { uploadImage } from '../../utils/file';
 import { buildOrderService, buildOrderServices } from './domain';
+import { AppContext } from '../types/AppContext';
+import getUserByToken from '../../utils/getUserByToken';
 
 @Resolver()
 export class ServiceOrdersResolver {
   @Query(() => [ServiceOrdersType])
   @Authorized()
-  async getAllServiceOrders(): Promise<[ServiceOrdersType]> {
+  async getAllServiceOrders(
+    @Ctx() { token }: AppContext,
+  ): Promise<[ServiceOrdersType]> {
+    const userByToken = await getUserByToken(token);
+
+    if (!userByToken) {
+      throw new Error('Could not find user');
+    }
+
     const orders = await db.default.service_orders.findAll({
-      include: ['client', 'images', 'status'],
+      include: [
+        {
+          model: db.default.clients,
+          as: 'client',
+          where: {
+            company_id: userByToken.company.id,
+          },
+          required: true,
+        },
+        'images',
+        'status',
+      ],
       order: [
         ['updatedAt', 'DESC'],
         ['id', 'DESC'],
@@ -23,10 +44,28 @@ export class ServiceOrdersResolver {
   @Query(() => ServiceOrdersType)
   @Authorized()
   async getServiceOrder(
+    @Ctx() { token }: AppContext,
     @Arg('serviceOrderId') serviceOrderId: number,
   ): Promise<ServiceOrdersType> {
+    const userByToken = await getUserByToken(token);
+
+    if (!userByToken) {
+      throw new Error('Could not find user');
+    }
+
     const order = await db.default.service_orders.findByPk(serviceOrderId, {
-      include: ['client', 'images', 'status'],
+      include: [
+        {
+          model: db.default.clients,
+          as: 'client',
+          where: {
+            company_id: userByToken.company.id,
+          },
+          required: true,
+        },
+        'images',
+        'status',
+      ],
     });
 
     if (!order) {
@@ -39,8 +78,15 @@ export class ServiceOrdersResolver {
   @Mutation(() => ServiceOrdersType)
   @Authorized()
   async storeServiceOrder(
+    @Ctx() { token }: AppContext,
     @Arg('ServiceOrderData') ServiceOrderData: ServiceOrdersInput,
   ): Promise<ServiceOrdersType> {
+    const userByToken = await getUserByToken(token);
+
+    if (!userByToken) {
+      throw new Error('Could not find user');
+    }
+
     try {
       const serviceOrder = await db.default.service_orders.create({
         ...ServiceOrderData,
@@ -51,7 +97,18 @@ export class ServiceOrdersResolver {
       !!images.length && (await uploadImage(db, images, serviceOrder.id));
 
       const order = await db.default.service_orders.findByPk(serviceOrder.id, {
-        include: ['client', 'images', 'status'],
+        include: [
+          {
+            model: db.default.clients,
+            as: 'client',
+            where: {
+              company_id: userByToken.company.id,
+            },
+            required: true,
+          },
+          'images',
+          'status',
+        ],
       });
 
       return buildOrderService(order);
@@ -64,8 +121,15 @@ export class ServiceOrdersResolver {
   @Mutation(() => ServiceOrdersType)
   @Authorized()
   async updateServiceOrder(
+    @Ctx() { token }: AppContext,
     @Arg('ServiceOrderData') ServiceOrderData: ServiceOrdersInput,
   ): Promise<ServiceOrdersType> {
+    const userByToken = await getUserByToken(token);
+
+    if (!userByToken) {
+      throw new Error('Could not find user');
+    }
+
     try {
       await db.default.service_orders.update(
         { ...ServiceOrderData },
@@ -79,7 +143,18 @@ export class ServiceOrdersResolver {
       const order = await db.default.service_orders.findByPk(
         ServiceOrderData.id,
         {
-          include: ['client', 'images', 'status'],
+          include: [
+            {
+              model: db.default.clients,
+              as: 'client',
+              where: {
+                company_id: userByToken.company.id,
+              },
+              required: true,
+            },
+            'images',
+            'status',
+          ],
         },
       );
 

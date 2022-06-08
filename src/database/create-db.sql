@@ -82,8 +82,12 @@ CREATE TABLE service_orders (
 );
 
 INSERT INTO service_orders (client_id, equipment, brand, identification, reports, description, notes, value, status_id) 
-VALUES (1, 'Notebook', 'Asus', 'Cor Azul', 'Tela riscada', 'computador nao liga', 'sem fonte', '100.00', 1);
-INSERT INTO service_orders (client_id, equipment, brand, identification, reports, description, notes, value, status_id) VALUES (1, 'Notebook', 'Dell', 'Cor Preto', 'Tela riscada', 'computador nao liga', 'sem fonte', '200.00', 1);
+VALUES (1, 'Notebook', 'Asus', 'Cor Azul', 'Tela riscada', 'computador nao liga', 'sem fonte', '100.00', 1),
+(1, 'Notebook', 'Dell', 'Cor Preto', 'Tela riscada', 'computador nao liga', 'sem fonte', '200.00', 1),
+(2, 'Notebook', 'Dell', 'Cor Preto', 'Tela riscada', 'computador nao liga', 'sem fonte', '200.00', 1),
+(2, 'Notebook', 'Dell', 'Cor Preto', 'Tela riscada', 'computador nao liga', 'sem fonte', '200.00', 1),
+(2, 'Notebook', 'Dell', 'Cor Preto', 'Tela riscada', 'computador nao liga', 'sem fonte', '200.00', 1),
+(1, 'Notebook', 'Dell', 'Cor Preto', 'Tela riscada', 'computador nao liga', 'sem fonte', '200.00', 1);
 
 
 CREATE TABLE service_orders_images (
