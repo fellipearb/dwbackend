@@ -20,7 +20,7 @@ export class LoginResolver {
       throw new Error('Could not find user');
     }
 
-    const verify = comparePassword(password, user.password);
+    const verify = await comparePassword(password, user.password);
 
     if (!verify) {
       throw new Error('Bad password');
